@@ -29,6 +29,8 @@ services:
       # Persist data
       - opensearch-data:/usr/share/opensearch/data
     restart: unless-stopped
+    networks:
+      - opensearch-net
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:3.0.0
@@ -36,15 +38,21 @@ services:
     ports:
       - "5601:5601"
     environment:
-      # 👇 FIXED: Use HTTPS and add credentials
+      # 👇 FIXED: Use HTTPS and CORRECT password
       OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
       OPENSEARCH_USERNAME: admin
-      OPENSEARCH_PASSWORD: your_password     # Update Your Password
+      OPENSEARCH_PASSWORD: 0AkkUKg0Fe+H     # 👈 CORRECTED PASSWORD!
       # 👇 Allow self-signed certificates
       OPENSEARCH_SSL_VERIFICATIONMODE: none
     depends_on:
       - opensearch
     restart: unless-stopped
+    networks:
+      - opensearch-net
 
 volumes:
   opensearch-data:
+
+networks:
+  opensearch-net:
+    driver: bridge
